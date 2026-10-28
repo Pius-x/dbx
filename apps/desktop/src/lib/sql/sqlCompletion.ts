@@ -1085,6 +1085,10 @@ const DATA_TYPE_KEYWORDS = new Set([
   "JSON",
   "JSONB",
   "UUID",
+  // Spanner and CockroachDB share these types. This set only classifies
+  // candidates; the active dialect's keyword table controls availability.
+  "STRING",
+  "BYTES",
   "SERIAL",
   "BIGSERIAL",
   "SMALLSERIAL",

@@ -110,6 +110,16 @@ describe("CockroachDB SQL completion (#13078)", () => {
     expect(mysql("CREATE TEM")).toEqual(expect.arrayContaining(["TEMPORARY"]));
   });
 
+  it.each(["STRING", "BYTES"])("preserves Spanner %s type completion without a CRDB profile", (type) => {
+    const sql = `CREATE TABLE t (value ${type.slice(0, 3)}`;
+    const items = buildSqlCompletionItems(sql, sql.length, {
+      databaseType: "spanner",
+      tables: [],
+      columnsByTable: new Map(),
+    });
+    expect(items.find((item) => item.label === type)?.detail).toBe("data type");
+  });
+
   it("returns signature help for CRDB functions", () => {
     const sql = "SELECT with_max_staleness(";
     const help = getSqlFunctionSignatureHelp(sql, sql.length, "postgres", "cockroachdb");
